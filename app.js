@@ -4,10 +4,9 @@ request("https://o136z8hk40.execute-api.us-east-1.amazonaws.com/dev/get-list-of-
     if(!error && response.statusCode == 200)
     {
         
-        var parsedData=JSON.parse(body);
+        var parsedData=JSON.parse(body);//Parsing data 
 
-        console.log(Object.keys(parsedData["paid"][0]))
-
+        //Displaying Paid Conferences
         console.log("==============================================")
         console.log("\t\tPaid Conferences: ")
         console.log("==============================================")
@@ -23,6 +22,7 @@ request("https://o136z8hk40.execute-api.us-east-1.amazonaws.com/dev/get-list-of-
             console.log("\n")
         });
 
+        //Displaying Free Conferences
         console.log("==============================================")
         console.log("\t\tFree Conferences: ")
         console.log("==============================================")
@@ -38,8 +38,8 @@ request("https://o136z8hk40.execute-api.us-east-1.amazonaws.com/dev/get-list-of-
             console.log("\n")
         });
 
-        //Preprocessing: Trimming the strings
-        let element=parsedData["paid"]
+        //Preprocessing: Trimming the strings for cases where additional spaces were provided
+        let element=parsedData["paid"]//stores the paid conference objects
         for(let i=0;i<parsedData["paid"].length;i++)
         {
             for(const key in element[0]){
@@ -48,8 +48,8 @@ request("https://o136z8hk40.execute-api.us-east-1.amazonaws.com/dev/get-list-of-
             }
         }
 
-
-        let duplicate=[]
+        //Finding exact duplicates in paid conferences
+        let duplicate=[]//stores the duplicates 
         console.log("==============================================")
         console.log("\t\tDuplicates in Paid Conf:")
         console.log("==============================================\n")
@@ -57,12 +57,12 @@ request("https://o136z8hk40.execute-api.us-east-1.amazonaws.com/dev/get-list-of-
         {
             for (let j = i+1; j < parsedData["paid"].length;j++)
             {
-                var flag=1
+                var flag=1//to check for duplicates
                 for(const key in element[0]){
-                    //console.log(key)
+                    
                     if(element[i][key]!=element[j][key])
                     {
-                        //console.log(element[i][key])
+                        
                         flag=0;
                         break;
                     }
@@ -83,25 +83,27 @@ request("https://o136z8hk40.execute-api.us-east-1.amazonaws.com/dev/get-list-of-
             console.log("No Exact Duplicates found\n")
         
         //Preprocessing: Trimming the strings
-        element1 = parsedData["free"]
+        var element1 = parsedData["free"]//stores the free conference objects
         for (let i = 0; i < parsedData["free"].length; i++) {
             for (const key in element1[0]) {
                 if (typeof (element1[i][key]) == "string")
                     element1[i][key] = element1[i][key].trim()
             }
         }
+
+        //Finding exact duplicates in free conferences
         console.log("==============================================")
         console.log("\t\tDuplicates in Free Conf:")
         console.log("==============================================\n")
         
-        duplicate = []
+        duplicate = []// stores the duplicates
         
         for (let i = 0; i < parsedData["free"].length; i++) {
             for (let j = i + 1; j < parsedData["free"].length; j++) {
-                var flag = 1
+                var flag = 1//to check for duplicates
                 for (const key in element1[0]) {
                     if (element1[i][key] != element1[j][key]) {
-                        // console.log(element1[i][key])
+                        
                         flag = 0;
                         break;
                     }
@@ -117,8 +119,9 @@ request("https://o136z8hk40.execute-api.us-east-1.amazonaws.com/dev/get-list-of-
         else
             console.log("No Exact Duplicates found\n")
 
-        
-        var flag1=0
+        //Checking semantic duplicates in paid conferences
+
+        var flag1=0// to check for semantic duplicates
         console.log("======================================================")
         console.log("\t\tSemantic Duplicates in Paid Conf:")
         console.log("======================================================\n")
@@ -136,6 +139,9 @@ request("https://o136z8hk40.execute-api.us-east-1.amazonaws.com/dev/get-list-of-
             console.log("No Semantic Duplicates found\n")
         
         flag1=0
+
+        //Checking semantic duplicates in free conferences
+        
         console.log("======================================================")
         console.log("\t\tSemantic Duplicates in Free Conf:")
         console.log("======================================================\n")
